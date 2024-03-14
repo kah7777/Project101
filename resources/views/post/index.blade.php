@@ -1,4 +1,5 @@
 <h1>All Our Posts</h1>
+<a href="/post/create">add your post here</a>
 <ul>
     @foreach ($posts as $post)
         <a href="/post/{{ $post->id }}">
@@ -8,3 +9,4 @@
             </li>
     @endforeach
 </ul>
+

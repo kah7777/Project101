@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use PhpParser\Node\Stmt\Return_;
@@ -13,7 +14,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts=Post::all();
+        $posts=Post::with('comments')->get();
         return view('post.index',compact('posts'));
     }
 
@@ -35,7 +36,7 @@ class PostController extends Controller
             'text'=>'required',
         ]);
         Post::create($data);
-        return redirect()->route('post.index');
+        return redirect('post');
     }
 
     /**
@@ -61,10 +62,10 @@ class PostController extends Controller
     {
         $data = request()->validate([
                 'title'=>'required|min:10',
-                'text'=>'text|required',
+                'text'=>'required',
             ]);
         $post->update($data);
-        return redirect('post.index');
+        return redirect('post');
     }
 
     /**
@@ -73,6 +74,6 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-        return redirect('post.index');
+        return redirect('post');
     }
 }
