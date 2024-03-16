@@ -19,7 +19,6 @@ class CommentController extends Controller
         ]);
         Comment::create($data);
         return redirect()->route('post.show',$post);
-        dd(request());
     }
 
     /**
