@@ -6,7 +6,7 @@
     {{ $errors->first('title') }}
     <br>
     <br>
-    <input type="text" name="text" id="text">
+    <textarea type="text" name="text" id="text"></textarea>
     {{ $errors->first('text') }}
     <br>
     <br>

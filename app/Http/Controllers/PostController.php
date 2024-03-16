@@ -44,6 +44,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        $post->load('comments');
         return view('post.show',compact('post'));
     }
 
@@ -65,7 +66,7 @@ class PostController extends Controller
                 'text'=>'required',
             ]);
         $post->update($data);
-        return redirect('post');
+        return redirect()->route('post.show',$post);
     }
 
     /**
