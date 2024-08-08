@@ -10,5 +10,5 @@
     {{ $errors->first('text') }}
     <br>
     <br>
-    <button>Submit</button>
+    <button type="submit">Submit</button>
 </form>

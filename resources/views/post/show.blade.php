@@ -1,3 +1,8 @@
+<ul style="list-style: none">
+    <li><a href="{{ route('post.index') }}">Posts</a></li>
+    <br>
+    <li><a href="{{ route('post.create') }}">Create a Posts</a></li>
+</ul>
 <h1>{{ $post->title }}</h1>
 <p style="width: 300px">{{ $post->text }}</p>
 <br>
