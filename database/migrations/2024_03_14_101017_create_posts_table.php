@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('text');
-            // $table->morphs('user');
+            $table->morphs('user');
             $table->timestamps();
         });
     }

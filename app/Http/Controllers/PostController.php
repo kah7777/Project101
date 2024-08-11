@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostResource;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\User;
 use PhpParser\Node\Stmt\Return_;
+use DB;
+
 
 class PostController extends Controller
 {
@@ -15,16 +19,9 @@ class PostController extends Controller
     public function index()
     {
         $posts=Post::with('comments')->get();
-        return view('post.index',compact('posts'));
+        return PostResource::collection($posts);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('post.create');
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -34,9 +31,19 @@ class PostController extends Controller
         $data = request()->validate([
             'title'=>'required|min:10',
             'text'=>'required',
+            'image'=>'required|image|max:2048',
         ]);
-        Post::create($data);
-        return redirect('post');
+        $post = \DB::transaction(function()use($data){
+            $post= Post::create([
+                'title'=>$data['title'],
+                'text'=>$data['text'],
+                'user_type'=>User::class,
+                'user_id'=>request()->user()->id,
+               ]);
+               $post->addMediaFromRequest("image")->toMediaCollection(Post::POST_IMAGE);
+               return $post;
+        });
+        return PostResource::make($post);
     }
 
     /**
@@ -45,15 +52,7 @@ class PostController extends Controller
     public function show(Post $post)
     {
         $post->load('comments');
-        return view('post.show',compact('post'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Post $post)
-    {
-        return view('post.edit',compact('post'));
+        return PostResource::make($post);
     }
 
     /**
@@ -62,11 +61,12 @@ class PostController extends Controller
     public function update(Post $post)
     {
         $data = request()->validate([
-                'title'=>'required|min:10',
-                'text'=>'required',
+            'title'=>'required|min:10',
+            'text'=>'required',
+            'imgae'=>'required|image|max:2048',
             ]);
         $post->update($data);
-        return redirect()->route('post.show',$post);
+        return PostResource::make($post);
     }
 
     /**
@@ -74,7 +74,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $post->delete();
-        return redirect('post');
+       return $post->delete();
+
+
     }
 }
