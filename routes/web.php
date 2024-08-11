@@ -20,10 +20,6 @@ use App\Http\Controllers\TestController;
 Route::get('/', function () {
     return view('welcome');
 });
-# POST ROUTES CRUD ---------------------------
-Route::resource('post',PostController::class);
-# COMMENT ROUTES -----------------------------------------------------------------------------------
-Route::post('/post/{post}/comment',[CommentController::class,'store'])->name('post.comments.store');
 # EVENTS ROUTES FOR TESTING ---------------------------------------------------------------
 Route::get('/event',function(){
 

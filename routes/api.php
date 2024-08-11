@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\BasicController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ConversationController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,3 +32,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/chat/{otherUser}', [ConversationController::class, 'checkConversation']);
     Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store']);
 });
+
+# POST ROUTES CRUD ---------------------------
+Route::apiResource('post',PostController::class);
+# COMMENT ROUTES -----------------------------------------------------------------------------------
+Route::post('/post/{post}/comment',[CommentController::class,'store'])->name('post.comments.store');
