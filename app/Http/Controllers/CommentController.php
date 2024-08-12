@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Post $post)
     {
         $data = request()->validate([
@@ -18,16 +16,23 @@ class CommentController extends Controller
             'post_id'=>'required|exists:posts,id',
         ]);
         $comment = Comment::create($data);
+        return CommentResource::make($comment);
     }
 
     public function update(Request $request, Comment $comment)
     {
-
+        {
+            $data = request()->validate([
+                'text'=>'required',
+                ]);
+            $comment->update($data);
+            return CommentResource::make($comment);
+        }
     }
 
     public function destroy(Comment $comment)
     {
-
+        return $comment->delete();
     }
 }
 

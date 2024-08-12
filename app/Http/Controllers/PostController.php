@@ -13,19 +13,11 @@ use DB;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $posts=Post::with('comments')->get();
         return PostResource::collection($posts);
     }
-
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store()
     {
         $data = request()->validate([
@@ -45,19 +37,11 @@ class PostController extends Controller
         });
         return PostResource::make($post);
     }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Post $post)
     {
         $post->load('comments');
         return PostResource::make($post);
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Post $post)
     {
         $data = request()->validate([
@@ -68,14 +52,8 @@ class PostController extends Controller
         $post->update($data);
         return PostResource::make($post);
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Post $post)
     {
        return $post->delete();
-
-
     }
 }

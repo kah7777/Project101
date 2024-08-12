@@ -12,7 +12,9 @@ class CommentResource extends JsonResource
         return [
             'id'=>$this->id,
             'text'=>$this->text,
-            'username' => $this->whenLoaded('user', $this->user->fullName())
+            'username' => $this->whenLoaded('user', $this->user->fullName()),
+            'created_at'=>$this->created_at->toISO8601String(),
+
         ];
     }
 }

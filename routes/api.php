@@ -36,4 +36,4 @@ Route::middleware('auth:sanctum')->group(function () {
 # POST ROUTES CRUD ---------------------------
 Route::apiResource('post',PostController::class)->middleware('auth:sanctum');
 # COMMENT ROUTES -----------------------------------------------------------------------------------
-Route::post('/post/{post}/comment',[CommentController::class,'store'])->middleware('auth:sanctum');
+Route::apiResource('/post/{post}/comment',CommentController::class)->except(['show','index',])->middleware('auth:sanctum');
