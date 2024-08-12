@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    public function store(Post $post)
+    public function store()
     {
         $data = request()->validate([
             'text'=>'required',
@@ -19,7 +19,7 @@ class CommentController extends Controller
         return CommentResource::make($comment);
     }
 
-    public function update(Request $request, Comment $comment)
+    public function update(Comment $comment)
     {
         {
             $data = request()->validate([

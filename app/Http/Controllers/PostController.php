@@ -18,6 +18,7 @@ class PostController extends Controller
         $posts=Post::with('comments')->get();
         return PostResource::collection($posts);
     }
+
     public function store()
     {
         $data = request()->validate([
@@ -37,11 +38,13 @@ class PostController extends Controller
         });
         return PostResource::make($post);
     }
+
     public function show(Post $post)
     {
         $post->load('comments');
         return PostResource::make($post);
     }
+
     public function update(Post $post)
     {
         $data = request()->validate([
@@ -52,6 +55,7 @@ class PostController extends Controller
         $post->update($data);
         return PostResource::make($post);
     }
+
     public function destroy(Post $post)
     {
        return $post->delete();

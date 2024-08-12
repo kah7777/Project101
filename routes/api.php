@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store']);
 });
 
-# POST ROUTES CRUD ---------------------------
+# POST ROUTES CRUD ----------------------------------------------------------
 Route::apiResource('post',PostController::class)->middleware('auth:sanctum');
-# COMMENT ROUTES -----------------------------------------------------------------------------------
+# COMMENT ROUTES ---------------------------------------------------------------------------------------------------------
 Route::apiResource('/post/{post}/comment',CommentController::class)->except(['show','index',])->middleware('auth:sanctum');
