@@ -10,10 +10,13 @@ use Illuminate\Validation\ValidationException;
 
 class TestController extends Controller
 {
-    public function show(Request $request, Test $test)
+
+    public function index ()
+    {   $tests = Test::get();
+        return TestResource::collection($tests);
+    }
+    public function show(Test $test)
     {
-
-
         return response()->json(TestResource::make($test));
     }
 

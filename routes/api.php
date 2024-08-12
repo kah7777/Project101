@@ -21,19 +21,18 @@ use Spatie\MediaLibrary\Conversions\Conversion;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::get('/basics',BasicController::class);
-Route::get('/test/{test}',[TestController::class, 'show']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+# BASICS ROUTE (A BASIC IS A COLLCETION FOR BIGGENER FRIENDLY TEST TO TEST IF PAIENT IS AUTISITC OR NOT) -----------------------------------------------------------------------------------------------------------
+Route::get('/basics',BasicController::class);
+# POST ROUTES CRUD -------------------------------------------------------------------------------------------------------
+Route::apiResource('post',PostController::class)->middleware('auth:sanctum');
+# COMMENT ROUTES ---------------------------------------------------------------------------------------------------------
+Route::apiResource('/post/{post}/comment',CommentController::class)->except(['show','index',])->middleware('auth:sanctum');
+# TEST ROUTE -----------------------------------------------------------------------------------------------------------
+Route::apiResource('/test',TestController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/chat/{otherUser}', [ConversationController::class, 'checkConversation']);
     Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store']);
 });
 
-# POST ROUTES CRUD ----------------------------------------------------------
-Route::apiResource('post',PostController::class)->middleware('auth:sanctum');
-# COMMENT ROUTES ---------------------------------------------------------------------------------------------------------
-Route::apiResource('/post/{post}/comment',CommentController::class)->except(['show','index',])->middleware('auth:sanctum');

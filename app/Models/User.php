@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
+
 
 class User extends Authenticatable
 {
@@ -72,4 +75,29 @@ class User extends Authenticatable
     {
         return $this->name;
     }
+
+    public static function checkEmailIfExist(Request $request) : bool
+{
+
+        $email = $request->email;
+        $userHasEmail = User::where('email',$email)->first();
+        if($userHasEmail == null) {
+            return false;
+
+        }else {
+            return true;
+        }
+}
+
+    public static function validateData(Request $request)
+    {
+        $data = $request->validate([
+            "name"=>"required|string",
+            "email"=>"required|email|",
+            "password"=>"required|max:20",
+        ]);
+
+        return $data;
+    }
+
 }
