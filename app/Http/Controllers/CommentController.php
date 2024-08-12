@@ -17,36 +17,17 @@ class CommentController extends Controller
             'text'=>'required',
             'post_id'=>'required|exists:posts,id',
         ]);
-        Comment::create($data);
-        return redirect()->route('post.show',$post);
+        $comment = Comment::create($data);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Comment $comment)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Comment $comment)
     {
-        //
+
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Comment $comment)
     {
-        //
+
     }
 }
 

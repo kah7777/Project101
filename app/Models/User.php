@@ -52,6 +52,7 @@ class User extends Authenticatable
     {
         return $this->hasOne(Guardian::class);
     }
+
     public function posts()
     {
         return $this->hasMany(Post::class);
@@ -65,5 +66,10 @@ class User extends Authenticatable
     public function Messages()
     {
         return $this->hasMany(Message::class);
+    }
+
+    public function fullName()
+    {
+        return $this->name;
     }
 }

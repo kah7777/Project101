@@ -19,6 +19,10 @@ class Post extends Model implements HasMedia
     {
         return $this->hasMany(Comment::class);
     }
+    public function commentsWithUsers()
+    {
+        return $this->hasMany(Comment::class)->with("User");
+    }
     public function user()
     {
         return $this->mourphTo();
