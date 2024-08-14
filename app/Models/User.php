@@ -71,6 +71,11 @@ class User extends Authenticatable
         return $this->hasMany(Message::class);
     }
 
+    public function Tests()
+    {
+        return $this->hasMany(Test::class),
+    }
+
     public function fullName()
     {
         return $this->name;

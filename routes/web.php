@@ -20,10 +20,11 @@ use App\Http\Controllers\TestController;
 Route::get('/', function () {
     return view('welcome');
 });
-# EVENTS ROUTES FOR TESTING ---------------------------------------------------------------
+# EVENTS ROUTES FOR PUSHER (FIRE AN EVENT) ---------------------------------------------------------------
 Route::get('/event',function(){
 
 });
+# EVENTS ROUTES FOR PUSHER (LISTEN FOR AN EVENT)---------------------------------------------------------------
 Route::get('/listen',function(){
     return view('listen');
 });

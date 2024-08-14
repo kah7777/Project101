@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BasicController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CommentController;
@@ -35,4 +36,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/chat/{otherUser}', [ConversationController::class, 'checkConversation']);
     Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store']);
 });
+
+Route::middleware('auth:sanctum')->get('/logout',[AuthController::class,"logoutFromUser"]);
+Route::post('/register',[AuthController::class,"signUpUserIfNotExist"]);
+Route::post('/login',[AuthController::class,"logintoUser"]);
+
 
