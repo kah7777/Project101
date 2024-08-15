@@ -30,7 +30,7 @@ Route::apiResource('post',PostController::class)->middleware('auth:sanctum');
 # COMMENT ROUTES ---------------------------------------------------------------------------------------------------------
 Route::apiResource('/post/{post}/comment',CommentController::class)->except(['show','index',])->middleware('auth:sanctum');
 # TEST ROUTE -----------------------------------------------------------------------------------------------------------
-Route::get('/test/score',[TestController::class,'isDone'])->middleware('auth:sanctum')->middleware('guardian');
+Route::get('/test/score',[TestController::class,'isDone'])->middleware(['auth:sanctum','guardian']);
 # CONV ROUTE -----------------------------------------------------------------------------------------------------------
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/chat/{otherUser}', [ConversationController::class, 'checkConversation']);
