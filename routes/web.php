@@ -28,8 +28,3 @@ Route::get('/event',function(){
 Route::get('/listen',function(){
     return view('listen');
 });
-Route::get('/login',function(){
-    return 'you are accepted to log in';
-})->name('login');
-# BIGGENER TEST ROUTE FOR ACCEPTING THE USER
-

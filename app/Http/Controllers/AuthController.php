@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -13,10 +15,29 @@ class AuthController extends Controller
     {
         $checkEmailIfExist = User::checkEmailIfExist($request);
         if(!$checkEmailIfExist){
-            $data = User::validateData($request);
-            User::Create($data);
+            $data = $request->validate([
+                "name"=>"required|string",
+                "email"=>"required|email|",
+                "password"=>"required|max:20",
+                'user_type'=> ['required', Rule::in(['doctor', 'guardian'])]
+            ]);
+            $user = User::Create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt($data['password']),
+            ]);
+            if($data['user_type'] == 'doctor') {
+                $user->doctor()->create([]);
+            } else {
+                $user->guardian()->create([]);
+            }
+            $token = $user->createToken('api');
+            return response()->json([
+                'user' => UserResource::make($user),
+                'token' => $token->plainTextToken
+            ]);
         }else {
-            return $request->json(422,'Email is already in use');
+            return response()->json([422,'Email is already in use']);
         }
     }
 
@@ -24,9 +45,12 @@ class AuthController extends Controller
     {
         $user = User::where("email",$request->email)->first();
         if($user != null && Hash::check($request->password,$user->password)){
-           return $user->createToken("device name")->plainTextToken;
+            $token = $user->createToken("api");
+            return response()->json([
+                'user' => UserResource::make($user),
+                'token' => $token->plainTextToken
+            ]);
         }
-
     }
 
     public function logOutFromUser(Request $request)

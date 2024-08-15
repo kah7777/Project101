@@ -20,6 +20,16 @@ class TestController extends Controller
         return response()->json(TestResource::make($test));
     }
 
+    public function store()
+    {
+        $data = request()->validate([
+            'title'=>'required|string|max_digits:30',
+            'threshold'=>'required|integer',
+        ]);
+        $test = Test::create($data);
+        return response()->json(TestResource::make($test));
+    }
+
     public function check(Test $test, Request $request)
     {
         $request->validate([
@@ -43,6 +53,19 @@ class TestController extends Controller
         return response()->json([
             'has_passed'=>false,
         ]);
+    }
+
+    public function isDone(Request $request)
+    {
+        if($request->solved){
+            $guardian = request()->currentUser()->guardian;
+            $guardian->update([
+                'score' => $guardian->score+1
+            ]);
+            return response()->json([
+                'score'=>$guardian->score
+            ]);
+        }
     }
 
 }

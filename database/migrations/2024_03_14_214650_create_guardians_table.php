@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('guardians', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
+            $table->unsignedInteger('score')->default(0);
             $table->timestamps();
         });
     }

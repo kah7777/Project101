@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
-
+use Laravel\Sanctum\Sanctum;
 
 class User extends Authenticatable
 {
@@ -20,28 +20,14 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'fname',
-        'lname',
-        'email',
-        'password',
+    protected $guarded = [
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
@@ -73,7 +59,7 @@ class User extends Authenticatable
 
     public function Tests()
     {
-        return $this->hasMany(Test::class),
+        return $this->hasMany(Test::class);
     }
 
     public function fullName()
@@ -94,6 +80,11 @@ class User extends Authenticatable
         }
 }
 
+    public function token()
+    {
+        return $this->morphOne(Sanctum::$personalAccessTokenModel, 'tokenable')->latest();
+    }
+
     public static function validateData(Request $request)
     {
         $data = $request->validate([
@@ -103,6 +94,16 @@ class User extends Authenticatable
         ]);
 
         return $data;
+    }
+
+    public function isDoctor(): bool
+    {
+        return filled($this->doctor);
+    }
+
+    public function isGuardian(): bool
+    {
+        return filled($this->guardian);
     }
 
 }

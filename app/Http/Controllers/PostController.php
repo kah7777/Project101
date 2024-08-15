@@ -13,6 +13,10 @@ use DB;
 
 class PostController extends Controller
 {
+    public function __construct() {
+        $this->middleware(['doctor','auth:sanctum'])->only(['store','update','destroy']);
+    }
+
     public function index()
     {
         $posts=Post::with('comments')->get();
