@@ -14,6 +14,7 @@ class CommentController extends Controller
         $data = request()->validate([
             'text'=>'required',
             'post_id'=>'required|exists:posts,id',
+            'user_id'=>'required|exists:users,id',
         ]);
         $comment = Comment::create($data);
         return CommentResource::make($comment);

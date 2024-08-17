@@ -56,6 +56,6 @@ class AuthController extends Controller
     public function logOutFromUser(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        return "logout happened";
+        return "logout happened and token for the login was deleted";
     }
 }

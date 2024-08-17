@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Test;
 use App\Http\Resources\TestResource;
 use App\Models\Answer;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class TestController extends Controller
@@ -58,7 +59,8 @@ class TestController extends Controller
     public function isDone(Request $request)
     {
         if($request->solved){
-            $guardian = request()->currentUser()->guardian;
+            $user = Auth::user();
+            $guardian = $user->guardian;
             $guardian->update([
                 'score' => $guardian->score+1
             ]);

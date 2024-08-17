@@ -26,7 +26,7 @@ class PostController extends Controller
     public function store()
     {
         $data = request()->validate([
-            'title'=>'required|min:10',
+            'title'=>'required',
             'text'=>'required',
             'image'=>'required|image|max:2048',
         ]);
@@ -52,10 +52,9 @@ class PostController extends Controller
     public function update(Post $post)
     {
         $data = request()->validate([
-            'title'=>'required|min:10',
+            'title'=>'required',
             'text'=>'required',
-            'imgae'=>'required|image|max:2048',
-            ]);
+        ]);
         $post->update($data);
         return PostResource::make($post);
     }
