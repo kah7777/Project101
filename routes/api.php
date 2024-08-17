@@ -28,7 +28,7 @@ Route::get('/basics',BasicController::class);
 # POST ROUTES CRUD -------------------------------------------------------------------------------------------------------
 Route::apiResource('post',PostController::class)->middleware('auth:sanctum');
 # COMMENT ROUTES ---------------------------------------------------------------------------------------------------------
-Route::apiResource('/post/{post}/comment',CommentController::class)->except(['show','index',])->middleware('auth:sanctum');
+Route::apiResource('/post/{post}/comment',CommentController::class)->except(['show','index'])->middleware('auth:sanctum');
 # TEST ROUTE -----------------------------------------------------------------------------------------------------------
 Route::get('/test/score',[TestController::class,'isDone'])->middleware(['auth:sanctum','guardian']);
 # CONV ROUTE -----------------------------------------------------------------------------------------------------------

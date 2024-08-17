@@ -67,11 +67,6 @@ class User extends Authenticatable
         return $this->name;
     }
 
-    public function userId()
-    {
-        return $this->id;
-    }
-
     public static function checkEmailIfExist(Request $request) : bool
 {
 

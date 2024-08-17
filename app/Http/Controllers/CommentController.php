@@ -14,25 +14,25 @@ class CommentController extends Controller
         $data = request()->validate([
             'text'=>'required',
             'post_id'=>'required|exists:posts,id',
-            'user_id'=>'required|exists:users,id',
         ]);
+        $data["user_id"] = request()->user()->id;
         $comment = Comment::create($data);
         return CommentResource::make($comment);
     }
 
-    public function update(Comment $comment)
+    public function update(Post $post ,Comment $comment)
     {
-        {
+    abort_unless(request()->user()->id == $comment->user_id,403,"UnAuthorized");
             $data = request()->validate([
                 'text'=>'required',
                 ]);
             $comment->update($data);
             return CommentResource::make($comment);
-        }
     }
 
-    public function destroy(Comment $comment)
+    public function destroy(Post $post, Comment $comment)
     {
+        abort_unless(request()->user()->id == $comment->user_id,403,"UnAuthorized");
         return $comment->delete();
     }
 }

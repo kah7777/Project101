@@ -51,16 +51,19 @@ class PostController extends Controller
 
     public function update(Post $post)
     {
+        abort_unless(request()->user()->id == $post->user_id,403,"UnAuthorized");
         $data = request()->validate([
             'title'=>'required',
             'text'=>'required',
         ]);
         $post->update($data);
         return PostResource::make($post);
+
     }
 
     public function destroy(Post $post)
     {
+       abort_unless(request()->user()->id == $post->user_id,403,"UnAuthorized");
        return $post->delete();
     }
 }
