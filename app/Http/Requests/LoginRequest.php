@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Services\ApiResponseService;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LoginRequest extends FormRequest
 {
@@ -32,6 +35,26 @@ class LoginRequest extends FormRequest
         return [
             'email.exists' => 'The provided credentials are incorrect',
         ];
+    }
+
+
+    /**
+     * Handle a failed validation attempt.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @return void
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            ApiResponseService::error(
+                'Validation failed',
+                422,
+                $validator->errors()->toArray()
+            )
+        );
     }
 
 }
