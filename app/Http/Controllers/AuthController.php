@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\ApiResponseService;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -11,6 +14,14 @@ use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
+
+    protected $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function signUpUserIfNotExist(Request $request)
     {
         $checkEmailIfExist = User::checkEmailIfExist($request);
@@ -41,15 +52,25 @@ class AuthController extends Controller
         }
     }
 
-    public function logInToUser(Request $request)
+    public function login(LoginRequest $request)
     {
-        $user = User::where("email",$request->email)->first();
-        if($user != null && Hash::check($request->password,$user->password)){
-            $token = $user->createToken("api");
-            return response()->json([
-                'user' => UserResource::make($user),
-                'token' => $token->plainTextToken
-            ]);
+        try {
+            $loginData = $this->authService->loginUser(
+                $request->email,
+                $request->password
+            );
+
+            if (!$loginData) {
+                return ApiResponseService::error('Invalid credentials', 401);
+            }
+
+            return ApiResponseService::success([
+                'user' => UserResource::make($loginData['user']),
+                'token' => $loginData['token']
+            ], 'Login successful');
+
+        } catch (\Exception $e) {
+            return ApiResponseService::error('Login failed: ' . $e->getMessage(), 500);
         }
     }
 
