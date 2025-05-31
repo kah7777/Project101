@@ -3,11 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\Sanctum;
 
@@ -67,10 +67,9 @@ class User extends Authenticatable
         return $this->name;
     }
 
-    public static function checkEmailIfExist(Request $request) : bool
+    public static function checkEmailIfExist($email) : bool
 {
 
-        $email = $request->email;
         $userHasEmail = User::where('email',$email)->first();
         if($userHasEmail == null) {
             return false;
@@ -83,17 +82,6 @@ class User extends Authenticatable
     public function token()
     {
         return $this->morphOne(Sanctum::$personalAccessTokenModel, 'tokenable')->latest();
-    }
-
-    public static function validateData(Request $request)
-    {
-        $data = $request->validate([
-            "name"=>"required|string",
-            "email"=>"required|email|",
-            "password"=>"required|max:20",
-        ]);
-
-        return $data;
     }
 
     public function isDoctor(): bool
