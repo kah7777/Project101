@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Http\Request;
 use Laravel\Sanctum\Sanctum;
 
 class User extends Authenticatable
@@ -47,24 +46,9 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-    public function conversations()
-    {
-        return $this->belongsToMany(Conversation::class);
-    }
-
-    public function Messages()
-    {
-        return $this->hasMany(Message::class);
-    }
-
     public function Tests()
     {
         return $this->hasMany(Test::class);
-    }
-
-    public function fullName()
-    {
-        return $this->name;
     }
 
     public static function checkEmailIfExist($email) : bool
