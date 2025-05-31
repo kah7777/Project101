@@ -3,8 +3,7 @@
 
 namespace App\Services;
 
-use App\Http\Requests\SignUpRequest;
-use App\Http\Resources\UserResource;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -47,6 +46,18 @@ class AuthService
             ];
         }else {
             return null;
+        }
+    }
+
+    public function logoutFromUser($request) {
+        $user = $request->user();
+
+        if(!$user || !($user->currentAccessToken())) {
+            return false;
+
+        }else {
+            $request->user()->currentAccessToken()->delete();
+            return true;
         }
     }
 }
