@@ -58,16 +58,28 @@ class AuthController extends Controller
             return ApiResponseService::success([
                 'user' => UserResource::make($loginData['user']),
                 'token' => $loginData['token']
-            ], 'Login successful');
+            ], 'Login successfully');
 
         } catch (\Exception $e) {
             return ApiResponseService::error('Login failed: ' . $e->getMessage(), 500);
         }
     }
 
-    public function logOutFromUser(Request $request)
+
+       public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-        return "Logout happened and token for the login was deleted";
+        try {
+            $logout = $this->authService->logoutFromUser($request);
+
+            if (!$logout) {
+                return ApiResponseService::error('Unauthenticated',401);
+            }
+
+            return ApiResponseService::success([],'Logout Successfully');
+        } catch(\Exception $e) {
+            return ApiResponseService::error('Logout failed:' .$e->getMessage(),500);
+        }
+
     }
+
 }
