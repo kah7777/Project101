@@ -37,6 +37,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store']);
 });
 # AUTH ROUTE -----------------------------------------------------------------------------------------------------------
-Route::post('/register',[AuthController::class,"signUpUserIfNotExist"]);
+Route::post('/register',[AuthController::class,"signUp"]);
 Route::post('/login',[AuthController::class,"login"]);
 Route::middleware('auth:sanctum')->get('/logout',[AuthController::class,"logoutFromUser"]);
