@@ -28,8 +28,8 @@ class SignUpRequest extends FormRequest
     {
         return [
                 "name"=>"required|string",
-                "email"=>"required|email|",
-                "password"=>"required|max:20",
+                "email"=>"required|email",
+                "password"=>"required|min:6|max:20",
                 'user_type'=> ['required', Rule::in(['doctor', 'guardian'])]
         ];
     }
