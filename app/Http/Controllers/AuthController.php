@@ -3,14 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\SignUpRequest;
 use App\Http\Resources\UserResource;
-use App\Models\User;
 use App\Services\ApiResponseService;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -22,33 +19,27 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function signUpUserIfNotExist(Request $request)
+    public function signUp(SignUpRequest $request)
     {
-        $checkEmailIfExist = User::checkEmailIfExist($request);
-        if(!$checkEmailIfExist){
-            $data = $request->validate([
-                "name"=>"required|string",
-                "email"=>"required|email|",
-                "password"=>"required|max:20",
-                'user_type'=> ['required', Rule::in(['doctor', 'guardian'])]
-            ]);
-            $user = User::Create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => bcrypt($data['password']),
-            ]);
-            if($data['user_type'] == 'doctor') {
-                $user->doctor()->create([]);
-            } else {
-                $user->guardian()->create([]);
+        try{
+            $signUpData = $this->authService->signUpUserIfNotExist(
+                $request->name,
+                $request->email,
+                $request->password,
+                $request->user_type,
+            );
+
+            if (!$signUpData) {
+                return ApiResponseService::error('Email is already in use', 422);
             }
-            $token = $user->createToken('api');
-            return response()->json([
-                'user' => UserResource::make($user),
-                'token' => $token->plainTextToken
-            ]);
-        }else {
-            return response()->json([422,'Email is already in use']);
+
+            return ApiResponseService::success([
+                'user' => UserResource::make($signUpData['user']),
+                'token' => $signUpData['token']
+            ], 'User registered successfully');
+
+        } catch(\Exception $e) {
+            return ApiResponseService::error('Sign Up Failed: ' . $e->getMessage(),500);
         }
     }
 
@@ -77,6 +68,6 @@ class AuthController extends Controller
     public function logOutFromUser(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        return "logout happened and token for the login was deleted";
+        return "Logout happened and token for the login was deleted";
     }
 }
