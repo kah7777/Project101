@@ -5,7 +5,9 @@ namespace App\Services;
 
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Request;
 
 class AuthService
 {
@@ -23,39 +25,59 @@ class AuthService
         ];
     }
 
-    public function signUpUserIfNotExist(string $name , string $email , string $password ,string $user_type )
+    public function register(array $data)
     {
-        $checkEmailIfExist = User::checkEmailIfExist($email);
+        return DB::transaction(function () use ($data) {
+            $checkEmailIfExist = User::where('email', $data['email'])->exists();
 
-        if(!$checkEmailIfExist) {
-            $user = User::Create([
-                'name' => $name,
-                'email' => $email,
-                'password' => bcrypt($password),
+            if ($checkEmailIfExist) {
+                return null;
+            }
+
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt($data['password']),
+                'gender' => $data['gender'],
             ]);
 
-            if($user_type == 'doctor') {
-                $user->doctor()->create([]);
+            if ($data['user_type'] == 'doctor') {
+                $this->createDoctor($user, $data);
             } else {
-                $user->guardian()->create([]);
+                $this->createChild($user, $data);
             }
 
             return [
                 'user' => $user,
                 'token' => $user->createToken('api')->plainTextToken,
             ];
-        }else {
-            return null;
-        }
+        });
+    }
+    protected function createDoctor(User $user, array $data)
+    {
+        $user->doctor()->create([
+            'years_of_experience' => $data['years_of_experience'] ?? 1,
+            'phone' => $data['phone'] ?? null,
+        ]);
     }
 
-    public function logoutFromUser($request) {
+    protected function createChild(User $user, array $data)
+    {
+        $user->child()->create([
+            'age' => $data['age'],
+            'height' => $data['height'] ?? 0,
+            'weight' => $data['weight'] ?? 0,
+        ]);
+    }
+
+
+    public function logoutFromUser($request)
+    {
         $user = $request->user();
 
-        if(!$user || !($user->currentAccessToken())) {
+        if (!$user || !($user->currentAccessToken())) {
             return false;
-
-        }else {
+        } else {
             $request->user()->currentAccessToken()->delete();
             return true;
         }

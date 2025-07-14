@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Doctor extends Model
 {
-    protected $guarded = [];
     use HasFactory;
+    
+    protected $guarded = [];
     public function user()
     {
         return $this->belongsTo(User::class);

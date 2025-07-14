@@ -36,9 +36,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Doctor::class);
     }
-    public function guardian()
+    public function child()
     {
-        return $this->hasOne(Guardian::class);
+        return $this->hasOne(Child::class);
     }
 
     public function posts()
@@ -67,15 +67,4 @@ class User extends Authenticatable
     {
         return $this->morphOne(Sanctum::$personalAccessTokenModel, 'tokenable')->latest();
     }
-
-    public function isDoctor(): bool
-    {
-        return filled($this->doctor);
-    }
-
-    public function isGuardian(): bool
-    {
-        return filled($this->guardian);
-    }
-
 }
