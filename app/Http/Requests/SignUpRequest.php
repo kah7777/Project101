@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Services\ApiResponseService;
 
@@ -26,15 +25,31 @@ class SignUpRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-                "name"=>"required|string",
-                "email"=>"required|email",
-                "password"=>"required|min:6|max:20",
-                'user_type'=> ['required', Rule::in(['doctor', 'guardian'])]
+        $commonRules = [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'gender' => 'required|in:male,female',
+            'user_type' => 'required|in:doctor,child',
         ];
+
+        if ($this->input('user_type') == 'doctor') {
+            $specificRules = [
+                'years_of_experience' => 'sometimes|integer|min:0',
+                'phone' => 'sometimes|string|max:20',
+            ];
+        } else {
+            $specificRules = [
+                'age' => 'required|integer|min:0|max:18',
+                'height' => 'sometimes|numeric|min:0|max:300',
+                'weight' => 'sometimes|numeric|min:0|max:200',
+            ];
+        }
+
+        return array_merge($commonRules, $specificRules);
     }
 
-        protected function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(
             ApiResponseService::error(
@@ -44,5 +59,4 @@ class SignUpRequest extends FormRequest
             )
         );
     }
-
 }

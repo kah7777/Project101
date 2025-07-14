@@ -22,7 +22,7 @@ class AuthController extends Controller
     public function signUp(SignUpRequest $request)
     {
         try{
-            $signUpData = $this->authService->register($request);
+            $signUpData = $this->authService->register($request->validated());
 
             if (!$signUpData) {
                 return ApiResponseService::error('Email is already in use', 422);
