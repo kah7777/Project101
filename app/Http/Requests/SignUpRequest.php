@@ -28,7 +28,8 @@ class SignUpRequest extends FormRequest
         $commonRules = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required|string|same:password', 
             'gender' => 'required|in:male,female',
             'user_type' => 'required|in:doctor,child',
         ];

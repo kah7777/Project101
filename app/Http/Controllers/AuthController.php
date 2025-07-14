@@ -70,7 +70,7 @@ class AuthController extends Controller
                 return ApiResponseService::error('Unauthenticated',401);
             }
 
-            return ApiResponseService::success([],'Logout Successfully');
+            return ApiResponseService::success(null,'Logout Successfully');
         } catch(\Exception $e) {
             return ApiResponseService::error('Logout failed:' .$e->getMessage(),500);
         }
