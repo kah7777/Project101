@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Conversation;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,10 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('conversation_user', function (Blueprint $table) {
+        Schema::create('children', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(Conversation::class);
+            $table->integer('age');
+            $table->decimal('height', 5, 2)->nullable();
+            $table->decimal('weight', 5, 2)->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('conversation_user');
+        Schema::dropIfExists('children');
     }
 };

@@ -15,6 +15,8 @@ return new class extends Migration
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
+            $table->unsignedInteger('years_of_experience')->default(1);
+            $table->string('phone')->nullable();
             $table->timestamps();
         });
     }
