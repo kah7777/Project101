@@ -19,8 +19,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $guarded = [
-    ];
+    protected $guarded = [];
 
     protected $hidden = [
         'password',
@@ -51,20 +50,24 @@ class User extends Authenticatable
         return $this->hasMany(Test::class);
     }
 
-    public static function checkEmailIfExist($email) : bool
-{
+    public static function checkEmailIfExist($email): bool
+    {
 
-        $userHasEmail = User::where('email',$email)->first();
-        if($userHasEmail == null) {
+        $userHasEmail = User::where('email', $email)->first();
+        if ($userHasEmail == null) {
             return false;
-
-        }else {
+        } else {
             return true;
         }
-}
+    }
 
     public function token()
     {
         return $this->morphOne(Sanctum::$personalAccessTokenModel, 'tokenable')->latest();
+    }
+
+    public function getTypeAttribute()
+    {
+        return $this->child()->exists() ? 'child' : 'doctor';
     }
 }

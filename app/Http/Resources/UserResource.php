@@ -13,7 +13,8 @@ class UserResource extends JsonResource
     {
         return [
             'name'=>$this->name,
-            'user_type'=>$this->guardian ? 'guardian': 'doctor',
+            'email'=>$this->email,
+            'user_type'=> $this->type,
         ];
     }
 }

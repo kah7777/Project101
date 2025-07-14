@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BasicController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,3 +31,6 @@ Route::get('/test/score',[TestController::class,'isDone'])->middleware(['auth:sa
 Route::post('/register',[AuthController::class,"signUp"]);
 Route::post('/login',[AuthController::class,"login"]);
 Route::middleware('auth:sanctum')->post('/logout',[AuthController::class,"logout"]);
+
+# PROFILE ROUTE -----------------------------------------------------------------------------------------------------------
+Route::middleware('auth:sanctum')->post('/children/update', [ProfileController::class, 'updateChildProfile']);

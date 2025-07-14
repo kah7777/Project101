@@ -10,9 +10,15 @@ class Child extends Model
     use HasFactory;
 
     protected $guarded = [];
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+    protected $casts = [
+        'age' => 'integer',
+        'height' => 'double',
+        'weight' => 'double',
+    ];
+
 }
