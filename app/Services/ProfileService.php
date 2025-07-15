@@ -31,4 +31,27 @@ class ProfileService
             ];
         });
     }
+
+    public function updateDoctorProfile(array $validatedData)
+    {
+        return DB::transaction(function () use ($validatedData) {
+            $user = auth()->user();
+            $doctor = $user->doctor()->firstOrFail();
+
+            $doctor->fill([
+                'years_of_experience' => $validatedData['years_of_experience'] ?? $doctor->years_of_experience,
+                'phone' => $validatedData['phone'] ?? $doctor->phone,
+            ])->save();
+
+            $user->fill([
+                'name' => $validatedData['name'] ?? $user->name,
+                'email' => $validatedData['email'] ?? $user->email,
+            ])->save();
+
+            return [
+                'user' => $user->fresh(),
+                'doctor' => $doctor->fresh()
+            ];
+        });
+    }
 }

@@ -7,7 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UpdateChildRequest extends FormRequest
+
+class UpdateDoctorRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,13 +28,12 @@ class UpdateChildRequest extends FormRequest
         return [
             'name' => 'nullable|string|max:255',
             'email' => 'nullable|email|unique:users,email,' . auth()->id(),
-            'age' => 'nullable|integer|min:0|max:18',
-            'height' => 'nullable|numeric|min:0|max:300',
-            'weight' => 'nullable|numeric|min:0|max:200',
+            'years_of_experience' => 'nullable|integer|min:1',
+            'phone' => 'nullable|string|max:20',
         ];
     }
 
-    /**
+        /**
      * Handle a failed validation attempt.
      *
      * @param  \Illuminate\Contracts\Validation\Validator  $validator

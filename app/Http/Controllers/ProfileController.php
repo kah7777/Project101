@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateChildRequest;
+use App\Http\Requests\UpdateDoctorRequest;
 use App\Http\Resources\ChildResource;
+use App\Http\Resources\DoctorResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Services\ApiResponseService;
@@ -40,4 +42,25 @@ class ProfileController extends Controller
             );
         }
     }
+    public function updateDoctorProfile(UpdateDoctorRequest $request)
+{
+    try {
+        $updatedData = $this->profileservice->updateDoctorProfile($request->validated());
+
+        if (!$updatedData) {
+            return ApiResponseService::error('Doctor profile not found', 404);
+        }
+
+        return ApiResponseService::success([
+            'user' => UserResource::make($updatedData['user']),
+            'doctor' => DoctorResource::make($updatedData['doctor'])
+        ], 'Doctor profile updated successfully');
+
+    } catch (\Exception $e) {
+        return ApiResponseService::error(
+            'Failed to update doctor profile: ' . $e->getMessage(),
+            500
+        );
+    }
+}
 }
