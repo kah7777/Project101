@@ -29,5 +29,8 @@ Route::post('/login',[AuthController::class,"login"]);
 Route::middleware('auth:sanctum')->post('/logout',[AuthController::class,"logout"]);
 
 # PROFILE ROUTE -----------------------------------------------------------------------------------------------------------
-Route::middleware('auth:sanctum')->post('/children/update', [ProfileController::class, 'updateChildProfile']);
-Route::middleware('auth:sanctum')->post('/doctor/update', [ProfileController::class, 'updateDoctorProfile']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/children/update', [ProfileController::class, 'updateChildProfile']);
+    Route::post('/doctor/update', [ProfileController::class, 'updateDoctorProfile']);
+    Route::post('change-password', [ProfileController::class, 'changePassword']);
+});
