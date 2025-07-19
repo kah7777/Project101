@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BasicController;
+use App\Http\Controllers\ChildMoodController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
@@ -33,4 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/children/update', [ProfileController::class, 'updateChildProfile']);
     Route::post('/doctor/update', [ProfileController::class, 'updateDoctorProfile']);
     Route::post('change-password', [ProfileController::class, 'changePassword']);
+
+    # MOOD CHILD -------------------------------------------------------------------------------------------------------------
+    Route::post('/mood-my-child', [ChildMoodController::class, 'store']);
 });

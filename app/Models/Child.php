@@ -15,10 +15,15 @@ class Child extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function mood()
+    {
+        return $this->hasMany(ChildMoodEvaluation::class);
+    }
     protected $casts = [
         'age' => 'integer',
         'height' => 'double',
         'weight' => 'double',
     ];
+
 
 }
