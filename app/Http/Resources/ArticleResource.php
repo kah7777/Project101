@@ -20,6 +20,9 @@ class ArticleResource extends JsonResource
             'description' => $this->description,
             'content' => $this->content,
             'image' => $this->getFirstMediaUrl('articles'),
+            'author' => [
+                'name' => $this->user->name,
+            ],
             'created_at' => $this->created_at->toDateTimeString(),
         ];
     }

@@ -20,8 +20,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-# POST ROUTES CRUD -------------------------------------------------------------------------------------------------------
-Route::apiResource('post',PostController::class)->middleware('auth:sanctum');
 # COMMENT ROUTES ---------------------------------------------------------------------------------------------------------
 Route::apiResource('/post/{post}/comment',CommentController::class)->except(['show','index'])->middleware('auth:sanctum');
 # AUTH ROUTE -----------------------------------------------------------------------------------------------------------

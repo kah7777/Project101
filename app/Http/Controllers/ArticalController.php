@@ -11,13 +11,16 @@ use Illuminate\Http\Request;
 class ArticalController extends Controller
 {
 
-       public function store(StoreArticleRequest $request)
+    public function store(StoreArticleRequest $request)
     {
         try {
+            $user = $request->user();
+
             $article = Article::create([
                 'title' => $request->title,
                 'description' => $request->description,
                 'content' => $request->content,
+                'user_id' => $user->id,
             ]);
 
             if ($request->hasFile('image')) {
@@ -34,5 +37,4 @@ class ArticalController extends Controller
             );
         }
     }
-
 }
