@@ -24,7 +24,7 @@ class ArticalController extends Controller
             ]);
 
             if ($request->hasFile('image')) {
-                $article->addMediaFromRequest('image')->toMediaCollection('articles');
+                $article->addMediaFromRequest('image')->toMediaCollection('articles', 'media');
             }
 
             return ApiResponseService::success([
