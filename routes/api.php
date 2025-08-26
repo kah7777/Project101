@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BasicController;
 use App\Http\Controllers\ChildMoodController;
@@ -35,4 +36,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     # MOOD CHILD -------------------------------------------------------------------------------------------------------------
     Route::post('/mood-my-child', [ChildMoodController::class, 'store']);
+
+    # Articals  -------------------------------------------------------------------------------------------------------------
+    Route::post('/add/artical', [ArticalController::class, 'store']);
+
 });
