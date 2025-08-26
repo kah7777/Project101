@@ -39,5 +39,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     # Articals  -------------------------------------------------------------------------------------------------------------
     Route::post('/add/artical', [ArticalController::class, 'store']);
+    Route::delete('/article/{id}', [ArticalController::class, 'destroy']);
 
 });
+
+# Articals  -------------------------------------------------------------------------------------------------------------
+Route::get('/articles', [ArticalController::class, 'index']);
+Route::get('/article/{id}', [ArticalController::class, 'show']);
