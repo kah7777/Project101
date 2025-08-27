@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\LearningController;
+use App\Http\Controllers\LearningController;
 use App\Http\Controllers\ArticalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExerciseController;
