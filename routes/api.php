@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\LearningController;
 use App\Http\Controllers\ArticalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExerciseController;
@@ -43,6 +44,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/exercises', [ExerciseController::class, 'store']);
     Route::delete('/exercises/{id}', [ExerciseController::class, 'destroy']);
     Route::get('/exercises/my', [ExerciseController::class, 'myExercises']);
+
+
+    # Learning  -------------------------------------------------------------------------------------------------------------
+
+    Route::get('/learnings', [LearningController::class, 'myLearnings']);
+    Route::get('/learnings/{id}', [LearningController::class, 'showLearning']);
 });
 
 # Articals  -------------------------------------------------------------------------------------------------------------
