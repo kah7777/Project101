@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreArticleRequest extends FormRequest
+class StoreExerciseRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,10 +25,13 @@ class StoreArticleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|max:500',
-            'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'name'        => 'required|string|max:255',
+            'duration'    => 'nullable|integer|min:1',
+            'description' => 'nullable|string',
+            'steps'       => 'required|array|min:3|max:3',
+            'steps.*'     => 'string|max:255',
+            'category'    => 'required|in:visual,auditory,verbal,sensory',
+            'video'       => 'nullable|file|mimes:mp4,mov,avi|max:51200',
         ];
     }
 

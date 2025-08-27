@@ -2,12 +2,10 @@
 
 use App\Http\Controllers\ArticalController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\BasicController;
+use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\ChildMoodController;
 use App\Http\Controllers\CommentController;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,11 +20,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 # COMMENT ROUTES ---------------------------------------------------------------------------------------------------------
-Route::apiResource('/post/{post}/comment',CommentController::class)->except(['show','index'])->middleware('auth:sanctum');
+Route::apiResource('/post/{post}/comment', CommentController::class)->except(['show', 'index'])->middleware('auth:sanctum');
 # AUTH ROUTE -----------------------------------------------------------------------------------------------------------
-Route::post('/register',[AuthController::class,"signUp"]);
-Route::post('/login',[AuthController::class,"login"]);
-Route::middleware('auth:sanctum')->post('/logout',[AuthController::class,"logout"]);
+Route::post('/register', [AuthController::class, "signUp"]);
+Route::post('/login', [AuthController::class, "login"]);
+Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, "logout"]);
 
 # PROFILE ROUTE -----------------------------------------------------------------------------------------------------------
 Route::middleware('auth:sanctum')->group(function () {
@@ -41,8 +39,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/add/artical', [ArticalController::class, 'store']);
     Route::delete('/article/{id}', [ArticalController::class, 'destroy']);
 
+    # Exercise  -------------------------------------------------------------------------------------------------------------
+    Route::post('/exercises', [ExerciseController::class, 'store']);
+    Route::delete('/exercises/{id}', [ExerciseController::class, 'destroy']);
+    Route::get('/exercises/my', [ExerciseController::class, 'myExercises']);
 });
 
 # Articals  -------------------------------------------------------------------------------------------------------------
 Route::get('/articles', [ArticalController::class, 'index']);
 Route::get('/article/{id}', [ArticalController::class, 'show']);
+
+# Exercise  -------------------------------------------------------------------------------------------------------------
+Route::get('/exercises/{id}', [ExerciseController::class, 'show']);
+Route::get('/exercises/category/{category}', [ExerciseController::class, 'byCategory']);
+Route::get('/exercises', [ExerciseController::class, 'index']);
