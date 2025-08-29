@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\ChildMoodController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,6 +52,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/learnings', [LearningController::class, 'myLearnings']);
     Route::get('/learnings/{id}', [LearningController::class, 'showLearning']);
     Route::get('/my-learnings-by-category/{category}', [LearningController::class, 'byCategory']);
+
+    // Posts
+    Route::get('/posts', [PostController::class, 'index']);
+    Route::post('/posts', [PostController::class, 'store']);
+    Route::post('/posts/{post}/like', [PostController::class, 'like']);
+    Route::post('/posts/{post}/unlike', [PostController::class, 'unlike']);
+    Route::delete('/posts/{post}', [PostController::class, 'destroy']);
+
+    // Comments
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store']);
+    Route::post('/comments/{comment}/like', [CommentController::class, 'like']);
+    Route::post('/comments/{comment}/unlike', [CommentController::class, 'unlike']);
+    Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
 });
 
 # Articals  -------------------------------------------------------------------------------------------------------------
