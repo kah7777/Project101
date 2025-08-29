@@ -50,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/learnings', [LearningController::class, 'myLearnings']);
     Route::get('/learnings/{id}', [LearningController::class, 'showLearning']);
+    Route::get('/my-learnings-by-category/{category}', [LearningController::class, 'byCategory']);
 });
 
 # Articals  -------------------------------------------------------------------------------------------------------------
