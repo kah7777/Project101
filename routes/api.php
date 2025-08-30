@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\ChildMoodController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DiagnosisController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -69,6 +70,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/comments/like/{comment}', [CommentController::class, 'like']);
     Route::post('/comments/unlike/{comment}', [CommentController::class, 'unlike']);
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
+
+    // Diagnosis
+    Route::post('/diagnoses', [DiagnosisController::class, 'store']);
+    Route::get('/diagnoses/last', [DiagnosisController::class, 'showLast']);
 });
 
 # Articals  -------------------------------------------------------------------------------------------------------------
