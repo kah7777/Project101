@@ -28,11 +28,13 @@ Route::post('/register', [AuthController::class, "signUp"]);
 Route::post('/login', [AuthController::class, "login"]);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, "logout"]);
 
-# PROFILE ROUTE -----------------------------------------------------------------------------------------------------------
 Route::middleware('auth:sanctum')->group(function () {
+    # PROFILE ROUTE -----------------------------------------------------------------------------------------------------------
     Route::post('/children/update', [ProfileController::class, 'updateChildProfile']);
     Route::post('/doctor/update', [ProfileController::class, 'updateDoctorProfile']);
     Route::post('change-password', [ProfileController::class, 'changePassword']);
+    Route::get('/profile', [ProfileController::class, 'getProfile']);
+
 
     # MOOD CHILD -------------------------------------------------------------------------------------------------------------
     Route::post('/mood-my-child', [ChildMoodController::class, 'store']);

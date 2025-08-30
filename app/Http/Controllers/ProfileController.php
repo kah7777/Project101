@@ -84,4 +84,35 @@ class ProfileController extends Controller
             );
         }
     }
+    public function getProfile(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            if (!$user) {
+                return ApiResponseService::error('User not found', 404);
+            }
+            $profileData = [
+                'user' => UserResource::make($user),
+            ];
+
+            if ($user->child) {
+                $profileData['child'] = ChildResource::make($user->child);
+            }
+
+            if ($user->doctor) {
+                $profileData['doctor'] = DoctorResource::make($user->doctor);
+            }
+
+            return ApiResponseService::success(
+                $profileData,
+                'Profile retrieved successfully'
+            );
+        } catch (\Exception $e) {
+            return ApiResponseService::error(
+                'Failed to retrieve profile: ' . $e->getMessage(),
+                500
+            );
+        }
+    }
 }
