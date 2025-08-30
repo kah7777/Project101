@@ -58,4 +58,38 @@ class PostController extends Controller
             return ApiResponseService::error('Failed to delete post: ' . $e->getMessage(), 500);
         }
     }
+
+    public function like(Post $post)
+    {
+        try {
+            $user = Auth::user();
+
+            if ($post->likes()->where('user_id', $user->id)->exists()) {
+                return ApiResponseService::error('Already liked', 400);
+            }
+
+            $post->likes()->create(['user_id' => $user->id]);
+
+            return ApiResponseService::success(null, 'post liked successfully');
+        } catch (\Exception $e) {
+            return ApiResponseService::error('Failed to like post: ' . $e->getMessage(), 500);
+        }
+    }
+
+    public function unlike(Post $post)
+    {
+        try {
+            $user = Auth::user();
+
+            $like = $post->likes()->where('user_id', $user->id)->first();
+            if (!$like) {
+                return ApiResponseService::error('You have not liked this post', 400);
+            }
+
+            $like->delete();
+            return ApiResponseService::success(null, 'post unliked successfully');
+        } catch (\Exception $e) {
+            return ApiResponseService::error('Failed to unlike post: ' . $e->getMessage(), 500);
+        }
+    }
 }

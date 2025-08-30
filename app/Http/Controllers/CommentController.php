@@ -11,6 +11,47 @@ use App\Http\Resources\CommentResource;
 
 class CommentController extends Controller
 {
+    public function index(Post $post)
+    {
+        try {
+            $comments = $post->comments()
+                ->with(['user', 'replies', 'likes'])
+                ->whereNull('parent_id')
+                ->latest()
+                ->get();
+
+            return ApiResponseService::success(
+                CommentResource::collection($comments),
+                'Comments retrieved successfully'
+            );
+        } catch (\Exception $e) {
+            return ApiResponseService::error(
+                'Failed to retrieve Comments: ' . $e->getMessage(),
+                500
+            );
+        }
+    }
+
+    public function replies(Comment $comment)
+    {
+        try {
+            $replies = $comment->replies()
+                ->with(['user', 'replies', 'likes'])
+                ->latest()
+                ->get();
+
+            return ApiResponseService::success(
+                CommentResource::collection($replies),
+                'Replies retrieved successfully'
+            );
+        } catch (\Exception $e) {
+            return ApiResponseService::error(
+                'Failed to retrieve Replies: ' . $e->getMessage(),
+                500
+            );
+        }
+    }
+
     public function like(Comment $comment)
     {
         try {
