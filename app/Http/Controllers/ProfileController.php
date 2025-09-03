@@ -115,4 +115,65 @@ class ProfileController extends Controller
             );
         }
     }
+
+    public function updateAvatar(Request $request)
+    {
+        try {
+            $request->validate([
+                'avatar' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            ]);
+
+            $user = $request->user();
+            $user->clearMediaCollection('avatar');
+
+            $user->addMediaFromRequest('avatar')->toMediaCollection('avatar');
+
+            return ApiResponseService::success([
+                'avatar' => $user->getFirstMediaUrl('avatar')
+            ], 'Avatar updated successfully');
+        } catch (\Exception $e) {
+            return ApiResponseService::error(
+                'Failed to update avatar: ' . $e->getMessage(),
+                500
+            );
+        }
+    }
+
+    public function deleteAvatar(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            $user->clearMediaCollection('avatar');
+
+            return ApiResponseService::success(null, 'Avatar deleted successfully');
+        } catch (\Exception $e) {
+            return ApiResponseService::error(
+                'Failed to delete avatar: ' . $e->getMessage(),
+                500
+            );
+        }
+    }
+
+    public function getAvatar(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            $avatarUrl = $user->getFirstMediaUrl('avatar');
+
+            if (!$avatarUrl) {
+                return ApiResponseService::error('No avatar found', 404);
+            }
+
+            return ApiResponseService::success([
+                'avatar' => $avatarUrl
+            ], 'Avatar retrieved successfully');
+        } catch (\Exception $e) {
+            return ApiResponseService::error(
+                'Failed to retrieve avatar: ' . $e->getMessage(),
+                500
+            );
+        }
+    }
 }

@@ -35,7 +35,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/doctor/update', [ProfileController::class, 'updateDoctorProfile']);
     Route::post('change-password', [ProfileController::class, 'changePassword']);
     Route::get('/profile', [ProfileController::class, 'getProfile']);
-
+    # AVATAR -------------------------------------------------------------------------------------------------------------------
+    Route::post('/user/avatar', [ProfileController::class, 'updateAvatar']);
+    Route::delete('/user/avatar', [ProfileController::class, 'deleteAvatar']);
+    Route::get('/user/avatar', [ProfileController::class, 'getAvatar']);
 
     # MOOD CHILD -------------------------------------------------------------------------------------------------------------
     Route::post('/mood-my-child', [ChildMoodController::class, 'store']);
