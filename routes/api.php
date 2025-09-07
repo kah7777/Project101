@@ -7,6 +7,7 @@ use App\Http\Controllers\ExerciseController;
 use App\Http\Controllers\ChildMoodController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DiagnosisController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -77,6 +78,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Diagnosis
     Route::post('/diagnoses', [DiagnosisController::class, 'store']);
     Route::get('/diagnoses/last', [DiagnosisController::class, 'showLast']);
+
+    // Message
+    Route::post('/messages', [MessageController::class, 'store']);
+
 });
 
 # Articals  -------------------------------------------------------------------------------------------------------------
