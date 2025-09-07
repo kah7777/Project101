@@ -62,14 +62,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/learnings/{id}', [LearningController::class, 'showLearning']);
     Route::get('/my-learnings-by-category/{category}', [LearningController::class, 'byCategory']);
 
-    // Posts
+    // Posts  -------------------------------------------------------------------------------------------------------------
     Route::get('/posts', [PostController::class, 'index']);
     Route::post('/posts', [PostController::class, 'store']);
     Route::post('/posts/like/{post}', [PostController::class, 'like']);
     Route::post('/posts/unlike/{post}', [PostController::class, 'unlike']);
     Route::delete('/posts/{post}', [PostController::class, 'destroy']);
 
-    // Comments
+    // Comments -------------------------------------------------------------------------------------------------------------
     Route::get('/posts/comments/{post}', [CommentController::class, 'index']);
     Route::get('/comments/reply/{comment}', [CommentController::class, 'replies']);
     Route::post('/posts/comments/{post}', [CommentController::class, 'store']);
@@ -77,11 +77,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/comments/unlike/{comment}', [CommentController::class, 'unlike']);
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy']);
 
-    // Diagnosis
+    // Diagnosis -------------------------------------------------------------------------------------------------------------
     Route::post('/diagnoses', [DiagnosisController::class, 'store']);
     Route::get('/diagnoses/last', [DiagnosisController::class, 'showLast']);
 
-    // Message
+    // Message -------------------------------------------------------------------------------------------------------------
     Route::post('/messages', [MessageController::class, 'store']);
 
 });
