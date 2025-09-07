@@ -26,6 +26,8 @@ class StoreChildMoodRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'exercise_id' => 'required|exists:exercises,id',
+            'duration' => 'nullable|integer|min:1',
             'mood' => 'required|in:angry,happy,unsure,anxious,sad',
             'participation' => 'required|in:excellent,good,average,poor',
             'activity_completion' => 'required|in:completed,partial,not_completed'

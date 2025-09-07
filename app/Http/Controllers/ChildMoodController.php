@@ -22,9 +22,11 @@ class ChildMoodController extends Controller
 
             $evaluation = ChildMoodEvaluation::create([
                 'child_id' => $child->id,
+                'exercise_id' => $request->exercise_id,
+                'duration' => $request->duration,
                 'mood' => $request->mood,
                 'participation' => $request->participation,
-                'activity_completion' => $request->activity_completion
+                'activity_completion' => $request->activity_completion,
             ]);
 
             return ApiResponseService::success([

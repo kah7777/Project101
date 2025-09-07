@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('child_mood_evaluations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('child_id')->constrained('children')->onDelete('cascade');
-            
+            $table->foreignId('exercise_id')->constrained('exercises')->onDelete('cascade');
+            $table->integer('duration')->nullable();
             $table->enum('mood', [
                 'angry',
                 'happy',
