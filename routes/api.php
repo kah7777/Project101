@@ -45,6 +45,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     # MOOD CHILD -------------------------------------------------------------------------------------------------------------
     Route::post('/mood-my-child', [ChildMoodController::class, 'store']);
+    Route::get('/mood-stats/weekly', [ChildMoodController::class, 'weeklyMoodStats']);
+    Route::get('/exercises/duration-by-category', [ChildMoodController::class, 'exercisesDurationByCategory']);
 
     # Articals  -------------------------------------------------------------------------------------------------------------
     Route::post('/add/artical', [ArticalController::class, 'store']);
@@ -83,7 +85,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Message -------------------------------------------------------------------------------------------------------------
     Route::post('/messages', [MessageController::class, 'store']);
-
 });
 
 # Articals  -------------------------------------------------------------------------------------------------------------

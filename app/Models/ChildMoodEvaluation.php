@@ -43,4 +43,9 @@ class ChildMoodEvaluation extends Model
             'not_completed' => 'غير مكتمل'
         ][$this->activity_completion] ?? '';
     }
+
+    public function exercise()
+{
+    return $this->belongsTo(Exercise::class);
+}
 }
