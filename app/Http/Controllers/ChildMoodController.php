@@ -74,6 +74,33 @@ class ChildMoodController extends Controller
         }
     }
 
+    public function weeklyExerciseDuration()
+    {
+        try {
+            $child = auth()->user()->child;
+
+            if (!$child) {
+                return ApiResponseService::error('No child associated with this user', 404);
+            }
+
+            $startOfWeek = Carbon::now()->startOfWeek();
+            $endOfWeek   = Carbon::now()->endOfWeek();
+
+            $totalDuration = ChildMoodEvaluation::where('child_id', $child->id)
+                ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+                ->sum('duration');
+
+            return ApiResponseService::success(
+                ['total_duration' => $totalDuration],
+                'Total exercise duration for this week retrieved successfully'
+            );
+        } catch (\Exception $e) {
+            return ApiResponseService::error(
+                'Failed to retrieve weekly exercise duration: ' . $e->getMessage(),
+                500
+            );
+        }
+    }
     public function exercisesDurationByCategory()
     {
         try {
@@ -103,4 +130,92 @@ class ChildMoodController extends Controller
             );
         }
     }
+
+    public function weeklyFocusedCategory()
+    {
+        try {
+            $child = auth()->user()->child;
+
+            if (!$child) {
+                return ApiResponseService::error('No child associated with this user', 404);
+            }
+
+            $startOfWeek = Carbon::now()->startOfWeek();
+            $endOfWeek   = Carbon::now()->endOfWeek();
+
+            $stats = ChildMoodEvaluation::where('child_id', $child->id)
+                ->whereBetween('child_mood_evaluations.created_at', [$startOfWeek, $endOfWeek])
+                ->join('exercises', 'child_mood_evaluations.exercise_id', '=', 'exercises.id')
+                ->select('exercises.category', DB::raw('SUM(child_mood_evaluations.duration) as total_duration'))
+                ->groupBy('exercises.category')
+                ->pluck('total_duration', 'exercises.category');
+
+
+            $categories = ['visual', 'auditory', 'verbal', 'sensory'];
+            $result = [];
+            foreach ($categories as $cat) {
+                $result[$cat] = $stats[$cat] ?? 0;
+            }
+
+            $focusedCategory = array_search(max($result), $result);
+
+            return ApiResponseService::success(
+                ['focused_category' => $focusedCategory],
+                'Weekly focused category retrieved successfully'
+            );
+        } catch (\Exception $e) {
+            return ApiResponseService::error(
+                'Failed to retrieve weekly focus: ' . $e->getMessage(),
+                500
+            );
+        }
+    }
+
+    public function weeklyFocusedCategoryPercentage()
+{
+    try {
+        $child = auth()->user()->child;
+
+        if (!$child) {
+            return ApiResponseService::error('No child associated with this user', 404);
+        }
+
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek   = Carbon::now()->endOfWeek();
+        $stats = ChildMoodEvaluation::where('child_id', $child->id)
+            ->whereBetween('child_mood_evaluations.created_at', [$startOfWeek, $endOfWeek])
+            ->join('exercises', 'child_mood_evaluations.exercise_id', '=', 'exercises.id')
+            ->select('exercises.category', DB::raw('SUM(child_mood_evaluations.duration) as total_duration'))
+            ->groupBy('exercises.category')
+            ->pluck('total_duration', 'exercises.category');
+
+        $categories = ['visual', 'auditory', 'verbal', 'sensory'];
+        $result = [];
+        foreach ($categories as $cat) {
+            $result[$cat] = $stats[$cat] ?? 0;
+        }
+
+        $totalDuration = array_sum($result);
+
+        $focusedCategory = array_search(max($result), $result);
+
+        $percentage = $totalDuration > 0
+            ? round(($result[$focusedCategory] / $totalDuration) * 100, 2)
+            : 0;
+
+        return ApiResponseService::success(
+            [
+                'focused_category' => $focusedCategory,
+                'percentage' => $percentage
+            ],
+            'Weekly focused category percentage retrieved successfully'
+        );
+    } catch (\Exception $e) {
+        return ApiResponseService::error(
+            'Failed to retrieve weekly focus percentage: ' . $e->getMessage(),
+            500
+        );
+    }
+}
+
 }

@@ -47,6 +47,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/mood-my-child', [ChildMoodController::class, 'store']);
     Route::get('/mood-stats/weekly', [ChildMoodController::class, 'weeklyMoodStats']);
     Route::get('/exercises/duration-by-category', [ChildMoodController::class, 'exercisesDurationByCategory']);
+    Route::get('/exercises/weekly-duration', [ChildMoodController::class, 'weeklyExerciseDuration']);
+    Route::get('/exercises/weekly-focused-category', [ChildMoodController::class, 'weeklyFocusedCategory']);
+    Route::get('/exercises/weekly-focused-percentage', [ChildMoodController::class, 'weeklyFocusedCategoryPercentage']);
 
     # Articals  -------------------------------------------------------------------------------------------------------------
     Route::post('/add/artical', [ArticalController::class, 'store']);
