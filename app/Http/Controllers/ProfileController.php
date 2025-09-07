@@ -18,6 +18,24 @@ class ProfileController extends Controller
 {
     protected $profileservice;
 
+    public function destroy(Request $request)
+    {
+        try {
+            $user = $request->user();
+            $user->delete();
+
+            return ApiResponseService::success(
+                null,
+                'Account deleted successfully'
+            );
+        } catch (\Exception $e) {
+            return ApiResponseService::error(
+                'Failed to delete account: ' . $e->getMessage(),
+                500
+            );
+        }
+    }
+    
     public function __construct(ProfileService $profileservice)
     {
         $this->profileservice = $profileservice;
